@@ -33,7 +33,7 @@ def read_dataframe(dirpath, excel_file_path, temperature_file_path):
     temp = pd.read_csv(temperature_file_path, delimiter=';')
     temp.rename(columns={'Czas': 'czas'}, inplace=True)
     temp['czas'] = pd.to_datetime(temp['czas'])
-    merged = temp.merge(df, how='outer', on='czas')
+    merged = pd.merge(df, temp, how='left', on='czas')
 
     return merged
 
