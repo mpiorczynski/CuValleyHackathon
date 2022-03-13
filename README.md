@@ -7,7 +7,7 @@ To start working with this model you need 4 things:
       IMPORTANT: In this directory there can't be any other files, like variables_description
 2) An excel file in which there are variables description ('opis_zmiennych.xlsx')
 3) A csv file in which there are heater temperatures ('temp_zuz.csv')
-4) A .sav file in which there are stored paraeters of xgboost model developed by us.
+4) A .sav file in which there are stored parameters of xgboost model developed by us.
 
 If you do not understand look on 'data' folder of this repository. There are all files you need.
 WARNING: in data/gz_files directory there are only few files to preserve storage
