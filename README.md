@@ -21,7 +21,11 @@ Run main.py file and you are done!
 
 ### [Data Exploration](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/data_exploration.ipynb)
 
-### [
+### [Model Training](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/model_training.ipynb)
+
+### [Model Interface](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/main.py)
+
+### [Model Explenation](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/data_exploration.ipynb)
 
 ### Presentation [PDF](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/CuValley%20GOLEM.pdf), [PowerPoint](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/CuValley%20GOLEM.pptx)
 
