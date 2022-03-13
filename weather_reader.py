@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def read_wheather(filepaths_encoding):
+def read_weather(filepaths_encoding):
     """filepaths_encoding is list of tuples of filepath to csv file from imgw (more in readmi file) and
     encoding of this file"""
 
@@ -17,11 +17,13 @@ def read_wheather(filepaths_encoding):
         dataframes.append(df)
     return pd.concat(dataframes, axis=0)
 
-filepaths_encoding = [('2-piec/s_d_t_415_2020.csv', 'utf-8'), ('2-piec/s_d_t_415_2021.csv', 'utf-8'),
-                      ('2-piec/s_d_t_01_2022.csv', 'ANSI')]
+#This is example of how filepaths_encoding argument might look like:
+# filepaths_encoding = [('data/weather/s_d_t_415_2020.csv', 'utf-8'), ('data/weather/s_d_t_415_2021.csv', 'utf-8'),
+#                       ('data/weather/s_d_t_01_2022.csv', 'ANSI')]
+
 
 def to_hours(df):
-    """after calling a read_weather function we have dataframe with whather data, but only for each day. We need
+    """after calling a read_weather function we have dataframe with weather data, but only for each day. We need
     for each hour. This function takes dataframe describing weather for each day and returns dataframe describing
     a weather of each hour of each day. (it assumes that all day weather was the same)"""
 
@@ -40,7 +42,11 @@ def to_hours(df):
     return pd.concat(days)
 
 def read(filepaths_encoding):
-    df = read_wheather(filepaths_encoding)
+    df = read_weather(filepaths_encoding)
     df = to_hours(df)
     return df
+
+#This is example of how filepaths_encoding argument might look like:
+# filepaths_encoding = [('data/weather/s_d_t_415_2020.csv', 'utf-8'), ('data/weather/s_d_t_415_2021.csv', 'utf-8'),
+#                       ('data/weather/s_d_t_01_2022.csv', 'ANSI')]
 

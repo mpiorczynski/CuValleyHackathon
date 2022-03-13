@@ -1,7 +1,6 @@
 from reader import read
 import pickle
 import xgboost as xgb
-
 from sklearn.metrics import mean_squared_error
 
 #For this file to work you need to have 4 things:
@@ -21,24 +20,24 @@ temperature_filepath = "data/temp_zuz.csv"
 model_parametrs = 'data/model.sav'
 #here are those three importat variables
 
+if __name__ == "__main__":
+      df = read(dirpath, excel_filepath, temperature_filepath)
+      # A simple function from prepered by us module read all necessary information into one pandas dataframe.
+      print("The data was loaded from files using 'reader' model. \n")
 
-df = read(dirpath, excel_filepath, temperature_filepath)
-# A simple function from prepered by us module read all necessary information into one pandas dataframe.
-print("The data was loaded from files using 'reader' model. \n")
-
-X = df.drop(columns=['temp_zuz'])
-y_true = df['temp_zuz'].values
-#Now it's time to split this dataframe to features and labels. Those two lines above are enough
-
-
-pipe = pickle.load(open(model_parametrs, 'rb'))
-#Reading model from file.
-print("The xgboost model was loaded using saved parameters. \n")
+      X = df.drop(columns=['temp_zuz'])
+      y_true = df['temp_zuz'].values
+      #Now it's time to split this dataframe to features and labels. Those two lines above are enough
 
 
-#Now let's use hour model on this data and test it.
-y_pred = pipe.predict(X)
-mse = mean_squared_error(y_true, y_pred)
+      pipe = pickle.load(open(model_parametrs, 'rb'))
+      #Reading model from file.
+      print("The xgboost model was loaded using saved parameters. \n")
 
-print("The model was tested on above_mentioned data. \n"
-      "The MSE score of the model is: ", mse)
+
+      #Now let's use hour model on this data and test it.
+      y_pred = pipe.predict(X)
+      mse = mean_squared_error(y_true, y_pred)
+
+      print("The model was tested on above_mentioned data. \n"
+            "The MSE score of the model is: ", mse)
