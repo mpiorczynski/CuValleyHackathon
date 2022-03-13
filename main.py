@@ -2,6 +2,8 @@ from reader import read
 import pickle
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+from graph_plotter import plot_test
 
 #For this file to work you need to have 4 things:
 # 1) A directory with all gz_files like 'like 'avg_from_2020_10_01_00_00_00_to_2020_10_01_23_59_00.gz'
@@ -17,7 +19,7 @@ from sklearn.metrics import mean_squared_error
 dirpath = "data/gz_files"
 excel_filepath = "data/opis_zmiennych.xlsx"
 temperature_filepath = "data/temp_zuz.csv"
-model_parametrs = 'data/model.sav'
+model_parametrs = 'model.sav'
 #here are those three importat variables
 
 if __name__ == "__main__":
@@ -37,7 +39,14 @@ if __name__ == "__main__":
 
       #Now let's use hour model on this data and test it.
       y_pred = pipe.predict(X)
-      mse = mean_squared_error(y_true, y_pred)
+      rmse = mean_squared_error(y_true, y_pred, squared=False)
 
       print("The model was tested on above_mentioned data. \n"
-            "The MSE score of the model is: ", mse)
+            "The Root Mean Squared Error score of the model is: ", rmse)
+
+      print("Creating graph, please wait.")
+
+      plt.plot(X.index, y_true, color='red')
+      plt.plot(X.index, y_pred, color='blue')
+      plt.legend(["Real vaules (red)", "Predicted vaules (blue)"])
+      plt.show()
