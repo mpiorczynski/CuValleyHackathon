@@ -208,8 +208,7 @@ def read(dirpath, excel_file_path, temperature_file_path):
                        '001tix01079.daca.pv_avg_45-60',
                        '001uxm0rf01.daca.pv_avg_45-60',
                        '001uxm0rf02.daca.pv_avg_45-60',
-                       '001uxm0rf03.daca.pv_avg_45-60',
-                       'minute']
+                       '001uxm0rf03.daca.pv_avg_45-60']
 
     corr_df = new_df[correlated_cols].copy()
 

@@ -3,7 +3,6 @@ import pickle
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
-from graph_plotter import plot_test
 
 #For this file to work you need to have 4 things:
 # 1) A directory with all gz_files like 'like 'avg_from_2020_10_01_00_00_00_to_2020_10_01_23_59_00.gz'
