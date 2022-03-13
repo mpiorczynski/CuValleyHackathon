@@ -1,5 +1,6 @@
 # CuValleyHackathon
-## Golem
+## Golem team
+### Team members: Mikołaj Piórczyński, Karol Rogoziński, Mateusz Borowski, Jędrzej Chmiel, Jakub Sobolewski
 
 ### [Data Exploration](https://github.com/mpiorczynski/CuValleyHackathon/blob/main/data_exploration.ipynb)
 
