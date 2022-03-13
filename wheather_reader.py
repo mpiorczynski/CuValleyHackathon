@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 
 def read_wheather(filepaths_encoding):
+    """filepaths_encoding is list of tuples of filepath to csv file from imgw (more in readmi file) and
+    encoding of this file"""
+
     dataframes = []
     for filepath, encoding in filepaths_encoding:
         names = ['station_name','year', 'month', 'day', 'temperature', 'cisnienia_pary_wodnej', 'wilgotnosc_wzgledna',
@@ -18,6 +21,10 @@ filepaths_encoding = [('2-piec/s_d_t_415_2020.csv', 'utf-8'), ('2-piec/s_d_t_415
                       ('2-piec/s_d_t_01_2022.csv', 'ANSI')]
 
 def to_hours(df):
+    """after calling a read_weather function we have dataframe with whather data, but only for each day. We need
+    for each hour. This function takes dataframe describing weather for each day and returns dataframe describing
+    a weather of each hour of each day. (it assumes that all day weather was the same)"""
+
     days = []
     for i in range(df.shape[0]):
         new_df = df.iloc[i:i+1, :]
