@@ -1,6 +1,13 @@
 import pandas as pd
 import os
 import numpy as np
+from scipy import stats
+
+def last_h(df, n_hours):
+    temp = df['temp_zuz'].copy()
+    for n in range(1, n_hours+1):
+        label = 'temp_last' + '_' + str(n)
+        df[label] = temp.fillna(method='ffill').shift(periods=1+60*(n-1))
 
 def read_dataframe(dirpath, excel_file_path, temperature_file_path):
     """This function creates a pandas dataframe in which there are given temperature and other data as
@@ -58,8 +65,58 @@ def remove_when_off(df, min_off=1270, margin=15, by='temp_zuz'):
             what[from_idx:to_idx] = False
     return df[what]
 
-def read_and_remove_when_off(dirpath, excel_file_path, temperature_file_path):
-    """This function read dataframes from files and then remove"""
 
-    df = read_dataframe(dirpath, excel_file_path, temperature_file_path)
-    return remove_when_off(df)
+def read(dirpath, excel_file_path, temperature_file_path):
+    merged = read_dataframe(dirpath, excel_file_path, temperature_file_path)
+    df = merged.copy()
+    df.set_index(['czas'], inplace=True)
+    df = df[~df.index.duplicated()]
+    df = df.asfreq('T')
+    last_h(df, 4)
+
+    cols = list(df.columns)
+    cols.remove('temp_zuz')
+
+    df = df.dropna(subset=cols)
+
+    col_names = ['REG NADAWY KONCENTRATU LIW1 Mg/h', 'REG NADAWY KONCENTRATU LIW2 Mg/h',
+                 'REG KONCENTRAT PRAZONY LIW3 Mg/h', 'REG PYL ZWROT LIW4 Mg/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ7 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ8 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ9 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ10 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ11 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ12 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ13 m3/h',
+                 'WODA CHŁODZĄCA DO KOLEKTOR KZ15 m3/h',
+                 'SUMARYCZNA MOC CIEPLNA ODEBRANA - CAŁKOWITA MW',
+                 'WODA POWROTNA KOLEKTORA KZ7 °C', 'WODA POWROTNA KOLEKTORA KZ8 °C',
+                 'WODA POWROTNA KOLEKTORA KZ9 °C']
+
+    new_df = df.copy()
+
+    new_df = pd.concat(
+        [new_df, new_df[col_names].rename(columns=lambda col_name: f'{col_name}_avg_00-15').rolling(window=15).mean()],
+        axis=1)
+    new_df = pd.concat([new_df, new_df[col_names].shift(periods=15, freq='min').rename(
+        columns=lambda col_name: f'{col_name}_avg_15-30').rolling(window=15).mean()], axis=1)
+    new_df = pd.concat([new_df, new_df[col_names].shift(periods=30, freq='min').rename(
+        columns=lambda col_name: f'{col_name}_avg_30-45').rolling(window=15).mean()], axis=1)
+    new_df = pd.concat([new_df, new_df[col_names].shift(periods=45, freq='min').rename(
+        columns=lambda col_name: f'{col_name}_avg_45-60').rolling(window=15).mean()], axis=1)
+
+    threshold = 0.165
+
+    correlated_cols = new_df.columns[new_df.corr()['temp_zuz'].abs() > threshold].tolist()
+    corr_df = new_df[correlated_cols].copy()
+
+    corr_df['temp_zuz'] = corr_df['temp_zuz'].interpolate()
+    df = corr_df.dropna()
+
+    df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]
+
+    df['minute'] = df.index.minute.values
+    df['minute'] = np.where(df['minute'] == 0, 60, df['minute'])
+    return df
+
+
